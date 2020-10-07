@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArticlesAPI.Models;
@@ -7,13 +8,16 @@ namespace ArticlesAPI.Services.ArticleServices
     public class PostgresArticlesRepo : IArticleServices
     {
         private readonly ArticleContext _articleContext;
-
         public PostgresArticlesRepo(ArticleContext context)
         {
             _articleContext = context;
         }
         public Article AddArticle(Article article)
         {
+            if (article == null)
+            {
+                throw new ArgumentNullException(nameof(article));
+            }
             _articleContext.Articles.Add(article);
             _articleContext.SaveChanges();
             return article;

@@ -1,14 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ArticlesAPI.Models
+namespace ArticlesAPI.Dtos
 {
-    public class Article
+    public class ArticleDTO
     {
-        [Key]
-        public int Id { get; set; }
-        [Required]
         public string Title { get; set; }
-        [Required]
         public string Content { get; set; }
     }
 }
