@@ -4,20 +4,26 @@ using ArticlesAPI.Models;
 using AutoMapper;
 using ArticlesAPI.Dtos;
 using System.Collections.Generic;
+using ArticlesAPI.JwtAuth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ArticlesAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleServices _articleService;
         private readonly IMapper _mapper;
+        private readonly IJwtAuth _jwtmanager;
 
-        public ArticlesController(IArticleServices articleService, IMapper mapper)
+        public ArticlesController(IArticleServices articleService, IMapper mapper, IJwtAuth jwtauth)
         {
             _articleService = articleService;
             _mapper = mapper;
+            _jwtmanager = jwtauth;
+
         }
 
         [HttpGet("GetAll")]
@@ -63,6 +69,18 @@ namespace ArticlesAPI.Controllers
         public IActionResult DeleteArticle(int id)
         {
             return Ok(_mapper.Map<List<ArticleDTO>>(_articleService.DeleteArticle(id)));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] UserCred userCred)
+        {
+            var token = _jwtmanager.Authenticate(userCred.Username, userCred.Password);
+            if (token == null)
+            {
+                return Unauthorized("Unauthorized");
+            }
+            return Ok(token);
         }
 
     }
