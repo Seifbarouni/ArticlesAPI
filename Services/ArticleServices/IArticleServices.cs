@@ -7,7 +7,7 @@ namespace ArticlesAPI.Services.ArticleServices
         List<Article> GetArticles();
         Article GetArticleById(int id);
         Article AddArticle(Article article);
-        Article UpdateArticle(int id, Article article);
+        void UpdateArticle(Article article);
         List<Article> DeleteArticle(int id);
 
     }

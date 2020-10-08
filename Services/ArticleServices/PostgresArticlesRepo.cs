@@ -40,11 +40,10 @@ namespace ArticlesAPI.Services.ArticleServices
             return _articleContext.Articles.ToList();
         }
 
-        public Article UpdateArticle(int id, Article article)
+        public void UpdateArticle(Article article)
         {
-            _articleContext.Articles.Update(article);
+            //_articleContext.Articles.Update(article);
             _articleContext.SaveChanges();
-            return article;
         }
     }
 }

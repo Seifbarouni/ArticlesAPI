@@ -46,9 +46,16 @@ namespace ArticlesAPI.Controllers
         }
 
         [HttpPut("UpdateArticle/{id}")]
-        public IActionResult UpdateArticle(int id, Article article)
+        public IActionResult UpdateArticle(int id, UpdateArticleDTO article)
         {
-            return Ok(_mapper.Map<ArticleDTO>(_articleService.UpdateArticle(id, article)));
+            var articleModelFromRepo = _articleService.GetArticleById(id);
+            if (articleModelFromRepo == null)
+            {
+                return NotFound();
+            }
+            _mapper.Map(article, articleModelFromRepo);
+            _articleService.UpdateArticle(articleModelFromRepo);
+            return NoContent();
         }
 
         [HttpDelete("DeleteArticle/{id}")]

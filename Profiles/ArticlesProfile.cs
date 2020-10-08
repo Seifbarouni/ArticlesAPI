@@ -10,6 +10,7 @@ namespace ArticlesAPI.Profiles
         {
             CreateMap<Article, ArticleDTO>();
             CreateMap<AddArticleDTO, Article>();
+            CreateMap<UpdateArticleDTO, Article>();
         }
     }
 }
