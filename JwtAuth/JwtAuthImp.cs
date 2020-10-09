@@ -12,7 +12,8 @@ namespace ArticlesAPI.JwtAuth
     {
         private readonly IDictionary<string, string> users = new Dictionary<string, string>{
             {"test1","pass1"},
-            {"test2","pass2"}
+            {"test2","pass2"},
+            {"Geralt","Unicorn"}
         };
         private readonly string key;
 
@@ -26,6 +27,7 @@ namespace ArticlesAPI.JwtAuth
             {
                 return null;
             }
+            //Create JWT token
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(key);
             var TokenDescriptor = new SecurityTokenDescriptor

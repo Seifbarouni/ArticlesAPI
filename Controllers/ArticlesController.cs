@@ -78,7 +78,7 @@ namespace ArticlesAPI.Controllers
             var token = _jwtmanager.Authenticate(userCred.Username, userCred.Password);
             if (token == null)
             {
-                return Unauthorized("Unauthorized");
+                return Unauthorized();
             }
             return Ok(token);
         }
