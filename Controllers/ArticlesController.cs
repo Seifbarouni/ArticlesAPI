@@ -73,7 +73,7 @@ namespace ArticlesAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] UserCred userCred)
+        public IActionResult Authenticate(UserCred userCred)
         {
             var token = _jwtmanager.Authenticate(userCred.Username, userCred.Password);
             if (token == null)
