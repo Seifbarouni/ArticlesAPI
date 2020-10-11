@@ -30,25 +30,34 @@ namespace ArticlesAPI.Controllers
 
         public IActionResult Get()
         {
-            return Ok(_mapper.Map<List<ArticleDTO>>(_articleService.GetArticles()));
+            ResponseModel<List<ArticleDTO>> response = new ResponseModel<List<ArticleDTO>>();
+            response.Data = _mapper.Map<List<ArticleDTO>>(_articleService.GetArticles());
+            return Ok(response);
         }
 
         [HttpGet("GetArticle/{id}")]
         public IActionResult GetArticle(int id)
         {
+            ResponseModel<ArticleDTO> response = new ResponseModel<ArticleDTO>();
             var article = _articleService.GetArticleById(id);
             if (article != null)
             {
-                return Ok(_mapper.Map<ArticleDTO>(article));
+                response.Data = _mapper.Map<ArticleDTO>(article);
+                return Ok(response);
             }
-            return NotFound();
+            response.Succes = false;
+            response.Data = null;
+            response.ErrorMessage = "Invalid Id";
+            return Ok(response);
         }
 
         [HttpPost("AddArticle")]
         public IActionResult AddArticle(AddArticleDTO article)
         {
             var articleModel = _mapper.Map<Article>(article);
-            return Ok(_mapper.Map<ArticleDTO>(_articleService.AddArticle(articleModel)));
+            ResponseModel<ArticleDTO> response = new ResponseModel<ArticleDTO>();
+            response.Data = _mapper.Map<ArticleDTO>(_articleService.AddArticle(articleModel));
+            return Ok(response);
         }
 
         [HttpPut("UpdateArticle/{id}")]
@@ -68,7 +77,9 @@ namespace ArticlesAPI.Controllers
 
         public IActionResult DeleteArticle(int id)
         {
-            return Ok(_mapper.Map<List<ArticleDTO>>(_articleService.DeleteArticle(id)));
+            ResponseModel<List<ArticleDTO>> response = new ResponseModel<List<ArticleDTO>>();
+            response.Data = _mapper.Map<List<ArticleDTO>>(_articleService.DeleteArticle(id));
+            return Ok(response);
         }
 
         [AllowAnonymous]
