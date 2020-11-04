@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ArticlesAPI.Models;
 
 namespace ArticlesAPI.Services.ArticleServices
@@ -12,38 +13,39 @@ namespace ArticlesAPI.Services.ArticleServices
         {
             _articleContext = context;
         }
-        public Article AddArticle(Article article)
+        public async Task<Article> AddArticle(Article article)
         {
             if (article == null)
             {
                 throw new ArgumentNullException(nameof(article));
             }
-            _articleContext.Articles.Add(article);
-            _articleContext.SaveChanges();
+            await _articleContext.Articles.AddAsync(article);
+            await _articleContext.SaveChangesAsync();
             return article;
         }
 
-        public List<Article> DeleteArticle(int id)
+        public async Task<List<Article>> DeleteArticle(int id)
         {
             _articleContext.Articles.Remove(_articleContext.Articles.FirstOrDefault(a => a.Id == id));
-            _articleContext.SaveChanges();
+            await _articleContext.SaveChangesAsync();
             return _articleContext.Articles.ToList();
         }
 
-        public Article GetArticleById(int id)
+        public async Task<Article> GetArticleById(int id)
         {
-            return _articleContext.Articles.FirstOrDefault(a => a.Id == id);
+            var article = await _articleContext.Articles.FindAsync(id);
+            return article;
         }
 
-        public List<Article> GetArticles()
+        public async Task<List<Article>> GetArticles()
         {
             return _articleContext.Articles.ToList();
         }
 
-        public void UpdateArticle(Article article)
+        public async Task UpdateArticle(Article article)
         {
             //_articleContext.Articles.Update(article);
-            _articleContext.SaveChanges();
+            await _articleContext.SaveChangesAsync();
         }
     }
 }

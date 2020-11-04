@@ -6,6 +6,7 @@ using ArticlesAPI.Dtos;
 using System.Collections.Generic;
 using ArticlesAPI.JwtAuth;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace ArticlesAPI.Controllers
 {
@@ -28,18 +29,18 @@ namespace ArticlesAPI.Controllers
 
         [HttpGet("GetAll")]
 
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             ResponseModel<List<ArticleDTO>> response = new ResponseModel<List<ArticleDTO>>();
-            response.Data = _mapper.Map<List<ArticleDTO>>(_articleService.GetArticles());
+            response.Data = _mapper.Map<List<ArticleDTO>>(await _articleService.GetArticles());
             return Ok(response);
         }
 
         [HttpGet("GetArticle/{id}")]
-        public IActionResult GetArticle(int id)
+        public async Task<IActionResult> GetArticle(int id)
         {
             ResponseModel<ArticleDTO> response = new ResponseModel<ArticleDTO>();
-            var article = _articleService.GetArticleById(id);
+            var article = await _articleService.GetArticleById(id);
             if (article != null)
             {
                 response.Data = _mapper.Map<ArticleDTO>(article);
@@ -52,33 +53,33 @@ namespace ArticlesAPI.Controllers
         }
 
         [HttpPost("AddArticle")]
-        public IActionResult AddArticle(AddArticleDTO article)
+        public async Task<IActionResult> AddArticle(AddArticleDTO article)
         {
             var articleModel = _mapper.Map<Article>(article);
             ResponseModel<ArticleDTO> response = new ResponseModel<ArticleDTO>();
-            response.Data = _mapper.Map<ArticleDTO>(_articleService.AddArticle(articleModel));
+            response.Data = _mapper.Map<ArticleDTO>(await _articleService.AddArticle(articleModel));
             return Ok(response);
         }
 
         [HttpPut("UpdateArticle/{id}")]
-        public IActionResult UpdateArticle(int id, UpdateArticleDTO article)
+        public async Task<IActionResult> UpdateArticle(int id, UpdateArticleDTO article)
         {
-            var articleModelFromRepo = _articleService.GetArticleById(id);
+            var articleModelFromRepo = await _articleService.GetArticleById(id);
             if (articleModelFromRepo == null)
             {
                 return NotFound();
             }
             _mapper.Map(article, articleModelFromRepo);
-            _articleService.UpdateArticle(articleModelFromRepo);
+            await _articleService.UpdateArticle(articleModelFromRepo);
             return NoContent();
         }
 
         [HttpDelete("DeleteArticle/{id}")]
 
-        public IActionResult DeleteArticle(int id)
+        public async Task<IActionResult> DeleteArticle(int id)
         {
             ResponseModel<List<ArticleDTO>> response = new ResponseModel<List<ArticleDTO>>();
-            response.Data = _mapper.Map<List<ArticleDTO>>(_articleService.DeleteArticle(id));
+            response.Data = _mapper.Map<List<ArticleDTO>>(await _articleService.DeleteArticle(id));
             return Ok(response);
         }
 
